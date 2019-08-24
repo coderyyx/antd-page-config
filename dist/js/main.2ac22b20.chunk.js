@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[1],{7:function(e,n,t){},8:function(e,n,t){"use strict";t.r(n);var a=t(0),c=t.n(a),r=t(2),i=t.n(r);t(7);i.a.render(c.a.createElement(function(){return c.a.createElement("div",{style:{textAlign:"center"}},"antd-page-config")},null),document.getElementById("app"))}},[[8,2,0]]]);

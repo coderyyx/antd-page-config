@@ -1,0 +1,12 @@
+.DS_Store
+node_modules/
+dist/
+public/
+scripts/
+config/
+postcss.config.js
+babel.config.js
+npm-debug.log*
+**/*.log
+
+package-lock.json
