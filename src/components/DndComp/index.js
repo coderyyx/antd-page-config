@@ -15,7 +15,7 @@ export default class DndComp extends React.Component {
       case 'onDrag':
         if (value.type === 'containerComp') {
           // 阻止拖拽时不停更新
-          if (Date.now() - now > 100) {
+          if (Date.now() - now > 200) {
             value.setLayout({
               x: data.x,
               y: data.y,
@@ -38,22 +38,22 @@ export default class DndComp extends React.Component {
   }
 
   render() {
-    const { value } = this.props;
+    const { value, pageRect } = this.props;
     const { id, layout = { x: 0, y: 0 }, containerClassName } = value;
     if (!id) {
       return null;
     }
-    const cls = classnames('diy-dnd', containerClassName);
+    const cls = classnames('apc-dnd', containerClassName);
     return (
       <Draggable
         axis='both'
-        handle='.diy-dnd'
+        handle='.apc-dnd'
         position={{ x: layout.x, y: layout.y }}
         grid={[1, 1]}
         scale={1}
         bounds={{
-          left: 0,
-          top: 0,
+          left: pageRect.limitLeft,
+          top: pageRect.limitTop,
         }}
         onStart={this.onDragHandler.bind(this, 'onDragStart')}
         onDrag={this.onDragHandler.bind(this, 'onDrag')}

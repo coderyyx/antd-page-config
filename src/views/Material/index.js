@@ -26,7 +26,7 @@ export default function Material(props) {
       className='apc-material'
     >
       <Panel header='容器组件' key='containerComp' style={{ borderRadius: 0 }}>
-        {Object.keys(Containers).filter((key) => Containers[key].show !== false).map((key) => (
+        {Object.keys(Containers).map((key) => (
           <DndMaterial
             key={key}
             onChange={selectElement.bind(this, key, 'containerComp')}

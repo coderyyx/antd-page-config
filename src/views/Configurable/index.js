@@ -6,43 +6,61 @@ import './index.less';
 export default class Configurable extends React.PureComponent {
   constructor() {
     super();
-    this.layoutRef = React.createRef();
     this.state = {
       elements: [],
       layoutRect: null,
-      pageSize: {
+      pageRect: {
         width: 0,
         height: 0,
       },
     };
+    this.elementTree = {
+      root: React.createElement('<div />'),
+    };
+    this.layoutRef = React.createRef();
   }
 
   componentDidMount() {
     if (!this.state.layoutRect) {
       const layoutRect = this.layoutRef.current.getBoundingClientRect();
+      // page rect
+      const width = Math.round(layoutRect.width * 0.7);
+      const height = Math.round((layoutRect.width * 0.7) / 1.406);
+      const left = layoutRect.left + Math.round((layoutRect.width - width) / 2);
+      const top = layoutRect.top + Math.round((layoutRect.height - height) / 2);
       this.setState({
         layoutRect,
-        pageSize: {
-          width: Math.round(layoutRect.width * 0.7),
-          height: Math.round((layoutRect.width * 0.7) / 1.406),
+        pageRect: {
+          width,
+          height,
+          left,
+          top,
+          x: left,
+          y: top,
+          right: left + width,
+          bottom: top + height,
+          limitLeft: layoutRect.left - left,
+          limitTop: layoutRect.top - top,
+          limitRight: 0,
+          limitBottom: 0,
         },
       });
     }
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { elements, layoutRect, pageSize } = prevState;
+    const { elements, layoutRect, pageRect } = prevState;
     const { currentDragMaterial, currentElement, willDeleteElementId } = nextProps;
     const materialRect = currentDragMaterial.layout || {};
     if (!elements.some((_) => _.id === currentDragMaterial.id) && currentDragMaterial.id) {
       if (materialRect.x >= layoutRect.left && materialRect.x + materialRect.w <= layoutRect.right
         && materialRect.y >= layoutRect.top && materialRect.y + materialRect.h <= layoutRect.bottom) {
-        currentDragMaterial.layout.x -= layoutRect.left;
-        currentDragMaterial.layout.y -= layoutRect.top;
+        currentDragMaterial.layout.x -= pageRect.left;
+        currentDragMaterial.layout.y -= pageRect.top;
         let extraValue = {};
         if (currentDragMaterial.type === 'containerComp') {
-          const { width } = pageSize;
-          const height = Math.round(pageSize.height / nextProps.ContainerHeightDivsion[currentDragMaterial.tagName]);
+          const { width } = pageRect;
+          const height = Math.round(pageRect.height / nextProps.ContainerHeightDivsion[currentDragMaterial.tagName]);
           extraValue = {
             style: {
               width,
@@ -74,10 +92,13 @@ export default class Configurable extends React.PureComponent {
     }
     if (willDeleteElementId) {
       const index = elements.find((_) => _.id === willDeleteElementId);
-      elements.splice(index, 1);
-      return {
-        elements: [...elements],
-      };
+      if (index) {
+        elements.splice(index, 1);
+        return {
+          elements: [...elements],
+        };
+      }
+      return null;
     }
     return null;
   }
@@ -95,20 +116,17 @@ export default class Configurable extends React.PureComponent {
   }
 
   render() {
-    const { elements, layoutRect, pageSize } = this.state;
+    const { elements, pageRect } = this.state;
     const { onSelect } = this.props;
     return (
-      <div className='apc-configure-container' ref={this.layoutRef}>
-        <div className='apc-configure-page-container' style={{ ...pageSize }}>
-          <div className='apc-configure-page-bg' />
-        </div>
-        <div className='apc-configure-layout'>
+      <div className='apc-configure-layout' ref={this.layoutRef}>
+        <div className='apc-configure-page' style={{ width: pageRect.width, height: pageRect.height }}>
           {
             elements.map((n) => (
               <DndComp
                 key={n.id}
                 value={n}
-                areaRect={layoutRect}
+                pageRect={pageRect}
                 onClick={onSelect}
                 onChange={this.setElement}
               >

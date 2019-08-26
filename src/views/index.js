@@ -38,7 +38,6 @@ export default class AntdPageConfig extends React.Component {
   changeCurrentElement = (value) => {
     this.setState({
       currentElement: value,
-      willDeleteElementId: '',
     });
   }
 
@@ -65,7 +64,7 @@ export default class AntdPageConfig extends React.Component {
       <section className='apc-layout'>
         <aside className='apc-slider'>
           <Tabs type='card' activeKey={activeKey} onChange={this.setActivekey}>
-            <TabPane tab='素材库' key='material'>
+            <TabPane tab='物料库' key='material'>
               <Material onReceiveDragMaterial={this.setCurrentDragMaterial} />
             </TabPane>
             <TabPane tab='属性设置' key='attribute'>
