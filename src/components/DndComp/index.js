@@ -37,6 +37,33 @@ export default class DndComp extends React.Component {
     }
   }
 
+  keyBoardMove = (e) => {
+    const { value, onChange } = this.props;
+    const moveOffset = {
+      37: {
+        type: 'x',
+        value: -1,
+      },
+      38: {
+        type: 'y',
+        value: -1,
+      },
+      39: {
+        type: 'x',
+        value: 1,
+      },
+      40: {
+        type: 'y',
+        value: 1,
+      },
+    };
+    value.setLayout({
+      x: moveOffset[e.keyCode].type === 'x' ? moveOffset[e.keyCode].value + value.layout.x : value.layout.x,
+      y: moveOffset[e.keyCode].type === 'y' ? moveOffset[e.keyCode].value + value.layout.y : value.layout.y,
+    });
+    onChange(value.id, value);
+  }
+
   render() {
     const { value, pageRect } = this.props;
     const { id, layout = { x: 0, y: 0 }, containerClassName } = value;
@@ -59,7 +86,7 @@ export default class DndComp extends React.Component {
         onDrag={this.onDragHandler.bind(this, 'onDrag')}
         onStop={this.onDragHandler.bind(this, 'onDragStop')}
       >
-        <div className={cls} id={id}>
+        <div className={cls} id={id} onKeyDown={this.keyBoardMove} tabIndex='-1'>
           {this.props.children}
         </div>
       </Draggable>
