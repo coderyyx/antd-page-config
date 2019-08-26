@@ -11,6 +11,9 @@ class ConfigurableElement {
     return new ConfigurableElement(material, defaultElement, enhanceValue);
   }
 
+  // 配置元素集
+  static Elements = []
+
   constructor(material, defaultElement, enhanceValue) {
     const { id, type, tagName } = material;
     this.id = id; // 可配置元素的id
@@ -18,7 +21,7 @@ class ConfigurableElement {
     this.type = type; // 元素的所属类型
     this.element = defaultElement.origin;
     this.children = defaultElement.children || null;
-    this.childrenIds = [];
+    this.childrenIds = enhanceValue.childrenIds || [];
     this.style = { ...defaultElement.style, ...enhanceValue.style };
     this.elementClassName = defaultElement.elementClassName;
     this.attribute = defaultElement.attribute || {};
@@ -61,11 +64,17 @@ class ConfigurableElement {
     };
   }
 
+  setChildrenIds(id) {
+    this.childrenIds.push(id);
+  }
+
   render() {
     if (this.type === 'antdComp') {
       return this.renderAntdComponent();
     } if (this.type === 'containerComp') {
       return this.renderContainerComponent();
+    } if (this.type === 'realContainerComp') {
+      return this.renderRealContainerComponent();
     } if (this.type === 'htmlElement') {
       return this.renderHtmlElement();
     }
@@ -90,7 +99,19 @@ class ConfigurableElement {
       key: this.id,
       style: this.style,
       className: this.elementClassName,
-      children: this.children,
+      children: this.renderChildren(),
+    });
+    return this.element;
+  }
+
+  renderRealContainerComponent() {
+    this.element = React.cloneElement(this.element, {
+      id: this.id,
+      key: this.id,
+      style: this.style,
+      className: this.elementClassName,
+      children: this.renderChildren(),
+      ...this.attribute,
     });
     return this.element;
   }
@@ -98,6 +119,13 @@ class ConfigurableElement {
   // eslint-disable-next-line class-methods-use-this
   renderHtmlElement() {
 
+  }
+
+  renderChildren() {
+    if (this.childrenIds.length) {
+      return this.childrenIds.map((id) => ConfigurableElement.Elements.find((_) => _.id === id).render());
+    }
+    return this.children;
   }
 }
 

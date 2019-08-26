@@ -1,4 +1,5 @@
 import React from 'react';
+import shortid from 'shortid';
 import DndComp from '@/components/DndComp';
 import { generateElement } from '@/material';
 import './index.less';
@@ -57,6 +58,7 @@ export default class Configurable extends React.PureComponent {
         && materialRect.y >= layoutRect.top && materialRect.y + materialRect.h <= layoutRect.bottom) {
         currentDragMaterial.layout.x -= pageRect.left;
         currentDragMaterial.layout.y -= pageRect.top;
+        let newRealElement; // Form，Row
         let extraValue = {};
         if (currentDragMaterial.type === 'containerComp') {
           const { width } = pageRect;
@@ -71,6 +73,14 @@ export default class Configurable extends React.PureComponent {
               h: height,
             },
           };
+          if (currentDragMaterial.tagName === 'Form') {
+            newRealElement = generateElement({
+              id: shortid(),
+              tagName: 'Form',
+              type: 'realContainerComp',
+            });
+            extraValue.childrenIds = [newRealElement.id];
+          }
         }
         const newElement = generateElement(currentDragMaterial, extraValue);
         if (newElement) {

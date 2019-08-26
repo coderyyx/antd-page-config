@@ -1,16 +1,20 @@
 import ConfigurableElement from './ConfigurableElement';
 import Components from './Components';
-import Containers from './Containers';
+import { Containers, RealContainers } from './Containers';
 import HTMLElements from './HTMLElements';
 
 export default (material, extraValue) => {
   const { type, tagName } = material;
+  let element;
   if (type === 'antdComp') {
-    return ConfigurableElement.initialize(material, Components[tagName], extraValue);
+    element = ConfigurableElement.initialize(material, Components[tagName], extraValue);
   } if (type === 'containerComp') {
-    return ConfigurableElement.initialize(material, Containers[tagName], extraValue);
+    element = ConfigurableElement.initialize(material, Containers[tagName], extraValue);
+  } if (type === 'realContainerComp') {
+    element = ConfigurableElement.initialize(material, RealContainers[tagName], extraValue);
   } if (type === 'htmlElement') {
-    return ConfigurableElement.initialize(material, HTMLElements[tagName], extraValue);
+    element = ConfigurableElement.initialize(material, HTMLElements[tagName], extraValue);
   }
-  return undefined;
+  ConfigurableElement.Elements.push(element);
+  return element;
 };
