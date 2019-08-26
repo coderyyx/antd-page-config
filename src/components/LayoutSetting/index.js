@@ -32,11 +32,11 @@ const LayoutSetting = React.forwardRef((props, ref) => {
       </div>
       <div className='figure-bounding'>
         <div className='figure-label'>W</div>
-        <InputNumber value={layout.w || 0} onChange={changeLayout.bind(this, 'w')} className='figure-rect' />
+        <InputNumber value={layout.w || 0} onChange={changeLayout.bind(this, 'w')} className='figure-rect' max={layout.maxW || Infinity} />
       </div>
       <div className='figure-bounding'>
         <div className='figure-label'>H</div>
-        <InputNumber value={layout.h || 0} onChange={changeLayout.bind(this, 'h')} className='figure-rect' />
+        <InputNumber value={layout.h || 0} onChange={changeLayout.bind(this, 'h')} className='figure-rect' max={layout.maxH || Infinity} />
       </div>
     </div>
   );

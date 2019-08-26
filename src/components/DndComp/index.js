@@ -5,7 +5,29 @@ import './index.less';
 
 let now = Date.now();
 
-export default class DndComp extends React.Component {
+export default class DndComp extends React.PureComponent {
+  state = {
+    limitBounds: null,
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!prevState.limitBounds) {
+      const { value, pageRect } = nextProps;
+      if (value.layout.inPage) {
+        return {
+          limitBounds: {
+            left: 0,
+            top: 0,
+            right: pageRect.width - value.layout.w,
+            bottom: pageRect.height - value.layout.h,
+          },
+        };
+      }
+    }
+    return null;
+  }
+
+
   onDragHandler = (handlerName, _, data) => {
     const { value, onClick, onChange } = this.props;
     switch (handlerName) {
@@ -37,35 +59,38 @@ export default class DndComp extends React.Component {
     }
   }
 
-  keyBoardMove = (e) => {
+  keyBoardOperation = (e) => {
     const { value, onChange } = this.props;
-    const moveOffset = {
-      37: {
-        type: 'x',
-        value: -1,
-      },
-      38: {
-        type: 'y',
-        value: -1,
-      },
-      39: {
-        type: 'x',
-        value: 1,
-      },
-      40: {
-        type: 'y',
-        value: 1,
-      },
-    };
-    value.setLayout({
-      x: moveOffset[e.keyCode].type === 'x' ? moveOffset[e.keyCode].value + value.layout.x : value.layout.x,
-      y: moveOffset[e.keyCode].type === 'y' ? moveOffset[e.keyCode].value + value.layout.y : value.layout.y,
-    });
-    onChange(value.id, value);
+    if (e.keyCode === 37) {
+      value.setLayout({
+        x: value.layout.x + 1,
+        y: value.layout.y,
+      });
+      onChange(value.id, value);
+    } else if (e.keyCode === 38) {
+      value.setLayout({
+        x: value.layout.x,
+        y: value.layout.y - 1,
+      });
+      onChange(value.id, value);
+    } else if (e.keyCode === 39) {
+      value.setLayout({
+        x: value.layout.x - 1,
+        y: value.layout.y,
+      });
+      onChange(value.id, value);
+    } else if (e.keyCode === 40) {
+      value.setLayout({
+        x: value.layout.x,
+        y: value.layout.y + 1,
+      });
+      onChange(value.id, value);
+    }
   }
 
   render() {
-    const { value, pageRect } = this.props;
+    const { limitBounds } = this.state;
+    const { value } = this.props;
     const { id, layout = { x: 0, y: 0 }, containerClassName } = value;
     if (!id) {
       return null;
@@ -78,15 +103,12 @@ export default class DndComp extends React.Component {
         position={{ x: layout.x, y: layout.y }}
         grid={[1, 1]}
         scale={1}
-        bounds={{
-          left: pageRect.limitLeft,
-          top: pageRect.limitTop,
-        }}
+        bounds={limitBounds || {}}
         onStart={this.onDragHandler.bind(this, 'onDragStart')}
         onDrag={this.onDragHandler.bind(this, 'onDrag')}
         onStop={this.onDragHandler.bind(this, 'onDragStop')}
       >
-        <div className={cls} id={id} onKeyDown={this.keyBoardMove} tabIndex='-1'>
+        <div className={cls} id={id} onKeyDown={this.keyBoardOperation} tabIndex='-1'>
           {this.props.children}
         </div>
       </Draggable>

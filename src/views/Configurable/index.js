@@ -25,8 +25,8 @@ export default class Configurable extends React.PureComponent {
     if (!this.state.layoutRect) {
       const layoutRect = this.layoutRef.current.getBoundingClientRect();
       // page rect
-      const width = Math.round(layoutRect.width * 0.7);
-      const height = Math.round((layoutRect.width * 0.7) / 1.406);
+      const width = Math.round((layoutRect.width + 200) * 0.7);
+      const height = Math.round(((layoutRect.width + 200) * 0.7) / 1.406);
       const left = layoutRect.left + Math.round((layoutRect.width - width) / 2);
       const top = layoutRect.top + Math.round((layoutRect.height - height) / 2);
       this.setState({
@@ -40,10 +40,6 @@ export default class Configurable extends React.PureComponent {
           y: top,
           right: left + width,
           bottom: top + height,
-          limitLeft: layoutRect.left - left,
-          limitTop: layoutRect.top - top,
-          limitRight: 0,
-          limitBottom: 0,
         },
       });
     }
@@ -59,19 +55,33 @@ export default class Configurable extends React.PureComponent {
         currentDragMaterial.layout.x -= pageRect.left;
         currentDragMaterial.layout.y -= pageRect.top;
         let newRealElement; // Form，Row
-        let extraValue = {};
+        const extraValue = {};
         if (currentDragMaterial.type === 'containerComp') {
-          const { width } = pageRect;
-          const height = Math.round(pageRect.height / nextProps.ContainerHeightDivsion[currentDragMaterial.tagName]);
-          extraValue = {
-            style: {
-              width,
-              height,
-            },
-            layout: {
-              w: width,
-              h: height,
-            },
+          let containerWidth;
+          let containerHeight;
+          if (currentDragMaterial.layout.x >= 0 && currentDragMaterial.layout.x <= pageRect.width
+            && currentDragMaterial.layout.y >= 0 && currentDragMaterial.layout.y <= pageRect.height) {
+            containerWidth = pageRect.width - currentDragMaterial.layout.x;
+            containerHeight = Math.round(pageRect.height / nextProps.ContainerHeightDivsion[currentDragMaterial.tagName]);
+            extraValue.layout = {
+              w: containerWidth,
+              h: containerHeight,
+              maxW: pageRect.width,
+              maxH: pageRect.height,
+              inPage: true,
+            };
+          } else {
+            containerWidth = layoutRect.width - currentDragMaterial.layout.x;
+            containerHeight = Math.round(layoutRect.height / nextProps.ContainerHeightDivsion[currentDragMaterial.tagName]);
+            extraValue.layout = {
+              w: containerWidth,
+              h: containerHeight,
+              inPage: false,
+            };
+          }
+          extraValue.style = {
+            width: containerWidth,
+            height: containerHeight,
           };
           if (currentDragMaterial.tagName === 'Form') {
             newRealElement = generateElement({
