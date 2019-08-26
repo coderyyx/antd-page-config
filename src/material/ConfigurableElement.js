@@ -1,33 +1,35 @@
 import React from 'react';
 
 class ConfigurableElement {
-  static initialize(material, defaultElement = {}, extraValue = {}) {
-    return new ConfigurableElement(material, defaultElement, extraValue);
+  /**
+   *
+   * @param {Object} material 物料
+   * @param {Object} defaultElement 默认元素
+   * @param {Object} enhanceValue 增强元素
+   */
+  static initialize(material, defaultElement = {}, enhanceValue = {}) {
+    return new ConfigurableElement(material, defaultElement, enhanceValue);
   }
 
-  constructor(material, defaultElement, extraValue) {
+  constructor(material, defaultElement, enhanceValue) {
     const { id, type, tagName } = material;
-    this.id = id;
-    this.type = type;
-    this.tagName = tagName;
+    this.id = id; // 可配置元素的id
+    this.tagName = tagName; // html标签和react组件标签
+    this.type = type; // 元素的所属类型
     this.element = defaultElement.origin;
     this.children = defaultElement.children || null;
-    this.attribute = defaultElement.attribute || {};
+    this.childrenIds = [];
+    this.style = { ...defaultElement.style, ...enhanceValue.style };
     this.elementClassName = defaultElement.elementClassName;
-    this.style = { ...defaultElement.style, ...extraValue.style };
-    this.layout = { ...material.layout, ...extraValue.layout };
-    this.originRect = { ...defaultElement.originRect };
+    this.attribute = defaultElement.attribute || {};
+    this.layout = { ...material.layout, ...enhanceValue.layout };
     this.containerClassName = defaultElement.containerClassName;
-    this.dndType = defaultElement.dndType || '';
-    this.options = [];
+    this.dndType = defaultElement.dndType || 'all'; // 拖拽放置的类型，默认为'all'
+    this.extraValue = {}; // 额外的数据
   }
 
   setChildren(children) {
     this.children = children;
-  }
-
-  setElementClassName(className) {
-    this.elementClassName = className;
   }
 
   setStyle(style) {
@@ -37,6 +39,10 @@ class ConfigurableElement {
     };
   }
 
+  setElementClassName(className) {
+    this.elementClassName = className;
+  }
+
   setAttribute(attribute) {
     this.attribute = {
       ...this.attribute,
@@ -44,8 +50,8 @@ class ConfigurableElement {
     };
   }
 
-  setOptions(options) {
-    this.options = options;
+  setExtraValue(extraValue) {
+    this.extraValue = extraValue;
   }
 
   setLayout(layout) {
