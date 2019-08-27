@@ -1,9 +1,10 @@
 import React from 'react';
-import { Form, Input, Radio } from 'antd';
+import { Form, Input, Radio, Select } from 'antd';
 import ColumnSetting from '@/components/ColumnSetting';
 import { getFormOptions } from '@/util';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 
 const formItemLayout = {
   labelCol: { span: 10 },
@@ -17,6 +18,14 @@ const TableAttribute = ({ form }) => {
       <FormItem label='表格主键' {...formItemLayout}>
         {getFieldDecorator('rowKey', {})(
           <Input placeholder='请输入' />,
+        )}
+      </FormItem>
+      <FormItem label='表格大小' {...formItemLayout}>
+        {getFieldDecorator('size', {})(
+          <Select placeholder='请选择' allowClear>
+            <Option value='small'>small</Option>
+            <Option value='middle'>middle</Option>
+          </Select>,
         )}
       </FormItem>
       <FormItem label='分页功能' {...formItemLayout}>
@@ -49,6 +58,7 @@ const TableAttribute = ({ form }) => {
 
 const formFieldsMap = {
   rowKey: 'id',
+  size: undefined,
   columns: [],
   paginationVisible: false,
   rowSelectionVisible: false,
