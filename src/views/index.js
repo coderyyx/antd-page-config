@@ -1,8 +1,9 @@
 import React from 'react';
-import { Tabs, Tooltip, Drawer, Icon } from 'antd';
+import { Tabs } from 'antd';
 import Configurable from './Configurable';
 import Material from './Material';
 import AttributeSetting from './AttributeSetting';
+import ToolBar from './ToolBar';
 import './index.less';
 
 const { TabPane } = Tabs;
@@ -13,7 +14,6 @@ export default class AntdPageConfig extends React.Component {
     currentDragMaterial: {},
     currentElement: {},
     willDeleteElementId: '',
-    codePreviewVisible: false,
     pageSize: {},
   }
 
@@ -59,14 +59,8 @@ export default class AntdPageConfig extends React.Component {
     }
   }
 
-  displayCodePreviewModal = () => {
-    this.setState({
-      codePreviewVisible: !this.state.codePreviewVisible,
-    });
-  }
-
   render() {
-    const { activeKey, currentDragMaterial, currentElement, willDeleteElementId, codePreviewVisible, pageSize } = this.state;
+    const { activeKey, currentDragMaterial, currentElement, willDeleteElementId, pageSize } = this.state;
     return (
       <section className='apc-layout'>
         <aside className='apc-slider'>
@@ -84,33 +78,10 @@ export default class AntdPageConfig extends React.Component {
         </aside>
         <section className='apc-layout-content'>
           <header className='apc-layout-header'>
-            <div className='page-edit-title'>
-              antd page config
-            </div>
-            <div className='page-size'>
-              <span className='page-size-title'>
-                宽:
-              </span>
-              <span className='page-size-value'>
-                {pageSize.width}
-              </span>
-              <span className='page-size-title'>
-                高:
-              </span>
-              <span className='page-size-value'>
-                {pageSize.height}
-              </span>
-            </div>
-            <Tooltip title='删除'>
-              <div className='close-element' onClick={this.deleteCurrentElement}>
-                <Icon type='delete' />
-              </div>
-            </Tooltip>
-            <Tooltip title='代码预览'>
-              <div className='code-expand-icon' onClick={this.displayCodePreviewModal}>
-                <Icon type='snippets' />
-              </div>
-            </Tooltip>
+            <ToolBar
+              pageSize={pageSize}
+              onDelete={this.deleteCurrentElement}
+            />
           </header>
           <main className='apc-content'>
             <Configurable
@@ -120,16 +91,7 @@ export default class AntdPageConfig extends React.Component {
               onSelect={this.selectCurrentElement}
               onChangePageSize={this.changePageSize}
             />
-            <Drawer
-              title='代码预览'
-              placement='right'
-              visible={codePreviewVisible}
-              onClose={this.displayCodePreviewModal}
-            >
-              <pre>
-                {'<div>\n</div>'}
-              </pre>
-            </Drawer>
+
           </main>
         </section>
       </section>
