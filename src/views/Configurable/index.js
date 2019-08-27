@@ -19,30 +19,14 @@ export default class Configurable extends React.PureComponent {
       root: React.createElement('<div />'),
     };
     this.layoutRef = React.createRef();
+    this.now = Date.now();
   }
 
   componentDidMount() {
     if (!this.state.layoutRect) {
-      const layoutRect = this.layoutRef.current.getBoundingClientRect();
-      // page rect
-      const width = Math.round((layoutRect.width + 200) * 0.7);
-      const height = Math.round(((layoutRect.width + 200) * 0.7) / 1.406);
-      const left = layoutRect.left + Math.round((layoutRect.width - width) / 2);
-      const top = layoutRect.top + Math.round((layoutRect.height - height) / 2);
-      this.setState({
-        layoutRect,
-        pageRect: {
-          width,
-          height,
-          left,
-          top,
-          x: left,
-          y: top,
-          right: left + width,
-          bottom: top + height,
-        },
-      });
+      this.getLayoutAndPageRect();
     }
+    window.addEventListener('resize', this.resize);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -123,6 +107,10 @@ export default class Configurable extends React.PureComponent {
     return null;
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resize);
+  }
+
   setElement = (id, element) => {
     const { elements } = this.state;
     const index = elements.findIndex((_) => _.id === id);
@@ -132,6 +120,35 @@ export default class Configurable extends React.PureComponent {
     });
     if (element.type === 'containerComp') {
       this.props.onSelect(element);
+    }
+  }
+
+  getLayoutAndPageRect = () => {
+    const layoutRect = this.layoutRef.current.getBoundingClientRect();
+    // page rect
+    const width = Math.round((layoutRect.width + 100) * 0.7);
+    const height = Math.round(((layoutRect.width + 100) * 0.7) / 1.406);
+    const left = layoutRect.left + Math.round((layoutRect.width - width) / 2);
+    const top = layoutRect.top + Math.round((layoutRect.height - height) / 2);
+    this.setState({
+      layoutRect,
+      pageRect: {
+        width,
+        height,
+        left,
+        top,
+        x: left,
+        y: top,
+        right: left + width,
+        bottom: top + height,
+      },
+    });
+  }
+
+  resize = () => {
+    if (Date.now() - this.now > 500) {
+      this.getLayoutAndPageRect();
+      this.now = Date.now();
     }
   }
 
