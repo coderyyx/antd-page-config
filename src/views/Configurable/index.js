@@ -5,6 +5,11 @@ import { generateElement } from '@/material';
 import './index.less';
 
 export default class Configurable extends React.PureComponent {
+  static ContainerHeightDivsion = {
+    Form: 3,
+    Grid: 10,
+  }
+
   constructor() {
     super();
     this.state = {
@@ -14,9 +19,6 @@ export default class Configurable extends React.PureComponent {
         width: 0,
         height: 0,
       },
-    };
-    this.elementTree = {
-      root: React.createElement('<div />'),
     };
     this.layoutRef = React.createRef();
     this.now = Date.now();
@@ -30,44 +32,39 @@ export default class Configurable extends React.PureComponent {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { elements, layoutRect, pageRect } = prevState;
+    const { elements, pageRect } = prevState;
     const { currentDragMaterial, currentElement, willDeleteElementId } = nextProps;
     const materialRect = currentDragMaterial.layout || {};
     if (!elements.some((_) => _.id === currentDragMaterial.id) && currentDragMaterial.id) {
-      if (materialRect.x >= layoutRect.left && materialRect.x + materialRect.w <= layoutRect.right
-        && materialRect.y >= layoutRect.top && materialRect.y + materialRect.h <= layoutRect.bottom) {
-        currentDragMaterial.layout.x -= pageRect.left;
-        currentDragMaterial.layout.y -= pageRect.top;
+      if (materialRect.x >= pageRect.left && materialRect.x + materialRect.w <= pageRect.right
+        && materialRect.y >= pageRect.top && materialRect.y + materialRect.h <= pageRect.bottom) {
+        // 预产生物料
+        const preElement = {
+          id: currentDragMaterial.id,
+          tagName: currentDragMaterial.tagName,
+          type: currentDragMaterial.type,
+          layout: {
+            x: currentDragMaterial.layout.x - pageRect.left,
+            y: currentDragMaterial.layout.y - pageRect.top,
+          },
+        };
         let newRealElement; // Form，Row
         const extraValue = {};
-        if (currentDragMaterial.type === 'containerComp') {
-          let containerWidth;
-          let containerHeight;
-          if (currentDragMaterial.layout.x >= 0 && currentDragMaterial.layout.x <= pageRect.width
-            && currentDragMaterial.layout.y >= 0 && currentDragMaterial.layout.y <= pageRect.height) {
-            containerWidth = pageRect.width - currentDragMaterial.layout.x;
-            containerHeight = Math.round(pageRect.height / nextProps.ContainerHeightDivsion[currentDragMaterial.tagName]);
-            extraValue.layout = {
-              w: containerWidth,
-              h: containerHeight,
-              maxW: pageRect.width,
-              maxH: pageRect.height,
-              inPage: true,
-            };
-          } else {
-            containerWidth = layoutRect.width - currentDragMaterial.layout.x;
-            containerHeight = Math.round(layoutRect.height / nextProps.ContainerHeightDivsion[currentDragMaterial.tagName]);
-            extraValue.layout = {
-              w: containerWidth,
-              h: containerHeight,
-              inPage: false,
-            };
-          }
+        if (preElement.type === 'containerComp') {
+          preElement.layout.x = 0;
+          const containerWidth = pageRect.width;
+          const containerHeight = Math.round(pageRect.height / Configurable.ContainerHeightDivsion[preElement.tagName]);
+          extraValue.layout = {
+            w: containerWidth,
+            h: containerHeight,
+            maxW: pageRect.width,
+            maxH: pageRect.height,
+          };
           extraValue.style = {
             width: containerWidth,
             height: containerHeight,
           };
-          if (currentDragMaterial.tagName === 'Form') {
+          if (preElement.tagName === 'Form') {
             newRealElement = generateElement({
               id: shortid(),
               tagName: 'Form',
@@ -76,7 +73,10 @@ export default class Configurable extends React.PureComponent {
             extraValue.childrenIds = [newRealElement.id];
           }
         }
-        const newElement = generateElement(currentDragMaterial, extraValue);
+        if (preElement.tagName === 'Table') {
+          preElement.layout.x = 0;
+        }
+        const newElement = generateElement(preElement, extraValue);
         if (newElement) {
           const currentElements = [...elements, newElement];
           if (currentElements.length !== elements.length) {
@@ -143,6 +143,10 @@ export default class Configurable extends React.PureComponent {
         bottom: top + height,
       },
     });
+    this.props.onChangePageSize({
+      width,
+      height,
+    });
   }
 
   resize = () => {
@@ -176,10 +180,3 @@ export default class Configurable extends React.PureComponent {
     );
   }
 }
-
-Configurable.defaultProps = {
-  ContainerHeightDivsion: {
-    Form: 3,
-    Grid: 10,
-  },
-};

@@ -14,6 +14,7 @@ export default class AntdPageConfig extends React.Component {
     currentElement: {},
     willDeleteElementId: '',
     codePreviewVisible: false,
+    pageSize: {},
   }
 
   setActivekey = (value) => {
@@ -41,6 +42,12 @@ export default class AntdPageConfig extends React.Component {
     });
   }
 
+  changePageSize = (value) => {
+    this.setState({
+      pageSize: value,
+    });
+  }
+
   deleteCurrentElement = () => {
     const { id } = this.state.currentElement;
     if (id) {
@@ -59,7 +66,7 @@ export default class AntdPageConfig extends React.Component {
   }
 
   render() {
-    const { activeKey, currentDragMaterial, currentElement, willDeleteElementId, codePreviewVisible } = this.state;
+    const { activeKey, currentDragMaterial, currentElement, willDeleteElementId, codePreviewVisible, pageSize } = this.state;
     return (
       <section className='apc-layout'>
         <aside className='apc-slider'>
@@ -80,6 +87,20 @@ export default class AntdPageConfig extends React.Component {
             <div className='page-edit-title'>
               antd page config
             </div>
+            <div className='page-size'>
+              <span className='page-size-title'>
+                宽:
+              </span>
+              <span className='page-size-value'>
+                {pageSize.width}
+              </span>
+              <span className='page-size-title'>
+                高:
+              </span>
+              <span className='page-size-value'>
+                {pageSize.height}
+              </span>
+            </div>
             <Tooltip title='删除'>
               <div className='close-element' onClick={this.deleteCurrentElement}>
                 <Icon type='delete' />
@@ -97,6 +118,7 @@ export default class AntdPageConfig extends React.Component {
               currentElement={currentElement}
               willDeleteElementId={willDeleteElementId}
               onSelect={this.selectCurrentElement}
+              onChangePageSize={this.changePageSize}
             />
             <Drawer
               title='代码预览'

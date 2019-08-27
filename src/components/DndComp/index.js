@@ -3,30 +3,53 @@ import Draggable from 'react-draggable';
 import classnames from 'classnames';
 import './index.less';
 
-let now = Date.now();
-
 export default class DndComp extends React.PureComponent {
-  state = {
-    limitBounds: null,
+  constructor() {
+    super();
+    this.state = {
+      limitBounds: null,
+      elementSize: {},
+    };
+    this.now = Date.now();
+  }
+
+  componentDidMount() {
+    const { value, pageRect } = this.props;
+    const dndCompRect = document.querySelector(`#${value.id}`).getBoundingClientRect();
+    this.setState({
+      limitBounds: {
+        left: 0,
+        top: 0,
+        right: pageRect.width - Math.round(dndCompRect.width),
+        bottom: pageRect.height - Math.round(dndCompRect.height),
+      },
+      elementSize: {
+        width: dndCompRect.width,
+        height: dndCompRect.height,
+      },
+    });
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (!prevState.limitBounds) {
-      const { value, pageRect } = nextProps;
-      if (value.layout.inPage) {
+    if (document.querySelector(`#${nextProps.value.id}`)) {
+      const dndCompRect = document.querySelector(`#${nextProps.value.id}`).getBoundingClientRect();
+      if (dndCompRect.width !== prevState.elementSize.width || dndCompRect.height !== prevState.elementSize.height) {
         return {
           limitBounds: {
             left: 0,
             top: 0,
-            right: pageRect.width - value.layout.w,
-            bottom: pageRect.height - value.layout.h,
+            right: nextProps.pageRect.width - Math.round(dndCompRect.width),
+            bottom: nextProps.pageRect.height - Math.round(dndCompRect.height),
+          },
+          elementSize: {
+            width: dndCompRect.width,
+            height: dndCompRect.height,
           },
         };
       }
     }
     return null;
   }
-
 
   onDragHandler = (handlerName, _, data) => {
     const { value, onClick, onChange } = this.props;
@@ -37,13 +60,13 @@ export default class DndComp extends React.PureComponent {
       case 'onDrag':
         if (value.type === 'containerComp') {
           // 阻止拖拽时不停更新
-          if (Date.now() - now > 200) {
+          if (Date.now() - this.now > 200) {
             value.setLayout({
               x: data.x,
               y: data.y,
             });
             onChange(value.id, value);
-            now = Date.now();
+            this.now = Date.now();
           }
         }
         break;

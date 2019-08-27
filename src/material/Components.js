@@ -9,12 +9,6 @@ export default {
     cn: '按钮',
     origin: <Button />,
     children: 'Button',
-    originRect: {
-      w: 74.98,
-      h: 32,
-      x: 0,
-      y: 0,
-    },
     attribute: {
       type: 'primary',
     },
@@ -24,12 +18,6 @@ export default {
     en: 'Input',
     cn: '输入框',
     origin: <Input />,
-    originRect: {
-      w: 171,
-      h: 32,
-      x: 0,
-      y: 0,
-    },
     attribute: {
       allowClear: false,
     },
@@ -38,12 +26,7 @@ export default {
     en: 'Table',
     cn: '表格',
     origin: <Table />,
-    originRect: {
-      w: 182,
-      h: 162,
-      x: 0,
-      y: 0,
-    },
+    containerClassName: 'apc-table-dnd',
     attribute: {
       pagination: false,
       rowKey: 'id',
@@ -54,13 +37,7 @@ export default {
     en: 'Select',
     cn: '选择器',
     origin: <Select />,
-    containerClassName: 'select-dnd',
-    originRect: {
-      w: 160,
-      h: 32,
-      x: 0,
-      y: 0,
-    },
+    containerClassName: 'apc-select-dnd',
     style: {
       width: '100%',
     },
@@ -72,23 +49,11 @@ export default {
     en: 'InputNumber',
     cn: '数字输入框',
     origin: <InputNumber />,
-    originRect: {
-      w: 88,
-      h: 32,
-      x: 0,
-      y: 0,
-    },
   },
   DatePicker: {
     en: 'DatePicker',
     cn: '日期选择框',
     origin: <DatePicker />,
-    originRect: {
-      w: 171,
-      h: 32,
-      x: 0,
-      y: 0,
-    },
     attribute: {
       allowClear: false,
     },
@@ -97,12 +62,6 @@ export default {
     en: 'RangePicker',
     cn: '范围日期选择框',
     origin: <RangePicker />,
-    originRect: {
-      w: 306.64,
-      h: 32,
-      x: 0,
-      y: 0,
-    },
     attribute: {
       allowClear: false,
     },
