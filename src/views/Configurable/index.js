@@ -158,7 +158,7 @@ export default class Configurable extends React.PureComponent {
 
   render() {
     const { elements, pageRect } = this.state;
-    const { onSelect } = this.props;
+    const { onSelect, onDelete } = this.props;
     return (
       <div className='apc-configure-layout' ref={this.layoutRef}>
         <div className='apc-configure-page' style={{ width: pageRect.width, height: pageRect.height }}>
@@ -169,6 +169,7 @@ export default class Configurable extends React.PureComponent {
                 value={n}
                 pageRect={pageRect}
                 onClick={onSelect}
+                onDelete={onDelete}
                 onChange={this.setElement}
               >
                 {n.render()}

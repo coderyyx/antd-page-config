@@ -103,6 +103,7 @@ export default class AntdPageConfig extends React.Component {
               currentElement={currentElement}
               willDeleteElementId={willDeleteElementId}
               onSelect={this.selectCurrentElement}
+              onDelete={this.deleteCurrentElement}
               onChangePageSize={this.changePageSize}
             />
           </main>

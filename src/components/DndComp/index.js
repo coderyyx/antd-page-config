@@ -11,18 +11,21 @@ export default class DndComp extends React.PureComponent {
       elementSize: {},
     };
     this.now = Date.now();
+    this.dndCompRef = React.createRef();
   }
 
   componentDidMount() {
-    const { value, pageRect } = this.props;
-    const dndCompRect = document.querySelector(`#${value.id}`).getBoundingClientRect();
+    const { pageRect } = this.props;
+    const dndCompRect = this.dndCompRef.current.getBoundingClientRect();
     this.updateState(pageRect, dndCompRect);
   }
 
   componentDidUpdate(prevProps) {
-    const dndCompRect = document.querySelector(`#${prevProps.value.id}`).getBoundingClientRect();
-    if (dndCompRect.width !== this.state.elementSize.width || dndCompRect.height !== this.state.elementSize.height) {
-      this.updateState(prevProps.pageRect, dndCompRect);
+    if (this.state.limitBounds) {
+      const dndCompRect = this.dndCompRef.current.getBoundingClientRect();
+      if (dndCompRect.width !== this.state.elementSize.width || dndCompRect.height !== this.state.elementSize.height) {
+        this.updateState(prevProps.pageRect, dndCompRect);
+      }
     }
   }
 
@@ -73,8 +76,10 @@ export default class DndComp extends React.PureComponent {
   }
 
   keyBoardOperation = (e) => {
-    const { value, onChange } = this.props;
-    if (e.keyCode === 37) {
+    const { value, onChange, onDelete } = this.props;
+    if (e.keyCode === 8) {
+      onDelete();
+    } else if (e.keyCode === 37) {
       value.setLayout({
         x: value.layout.x + 1,
         y: value.layout.y,
@@ -121,7 +126,7 @@ export default class DndComp extends React.PureComponent {
         onDrag={this.onDragHandler.bind(this, 'onDrag')}
         onStop={this.onDragHandler.bind(this, 'onDragStop')}
       >
-        <div className={cls} id={id} onKeyDown={this.keyBoardOperation} tabIndex='-1'>
+        <div ref={this.dndCompRef} className={cls} id={id} onKeyDown={this.keyBoardOperation} tabIndex='-1'>
           {this.props.children}
         </div>
       </Draggable>

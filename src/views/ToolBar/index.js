@@ -7,9 +7,6 @@ const ToolBar = (props) => {
   const [codePreviewVisible, setCodePreviewVisible] = useState(false);
   return (
     <>
-      <div className='page-edit-title'>
-        antd page config
-      </div>
       <div className='page-size'>
         <span className='page-size-title'>
           宽:
