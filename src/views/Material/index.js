@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Collapse } from 'antd';
 import shortid from 'shortid';
 import { Components, Containers } from '@/core';
@@ -9,7 +9,8 @@ const { Panel } = Collapse;
 
 export default function Material(props) {
   const { onReceiveDragMaterial } = props;
-  const defaultActiveKey = ['antdComp', 'containerComp', 'htmlElement'];
+  // const defaultActiveKey = ['antdComp', 'containerComp', 'htmlElement'];
+  const [activeKey, setActiveKey] = useState(['antdComp', 'containerComp', 'htmlElement']);
   function selectElement(tagName, type, value) {
     onReceiveDragMaterial({
       id: shortid(),
@@ -20,10 +21,11 @@ export default function Material(props) {
   }
   const memoizedComp = useMemo(() => (
     <Collapse
-      defaultActiveKey={defaultActiveKey}
+      activeKey={activeKey}
       expandIconPosition='right'
       bordered={false}
       className='apc-material'
+      onChange={setActiveKey}
     >
       <Panel header='容器组件' key='containerComp' style={{ borderRadius: 0 }}>
         {Object.keys(Containers).map((key) => (
@@ -65,7 +67,7 @@ export default function Material(props) {
         自定义组件
       </Panel> */}
     </Collapse>
-  ), []);
+  ), [activeKey]);
   return (
     <>
       {memoizedComp}
