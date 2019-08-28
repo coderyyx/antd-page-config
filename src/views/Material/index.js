@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Collapse } from 'antd';
 import shortid from 'shortid';
-import { Components, Containers } from '@/material';
+import { Components, Containers } from '@/core';
 import DndMaterial from '@/components/DndMaterial';
 import './index.less';
 

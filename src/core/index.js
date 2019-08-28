@@ -2,6 +2,7 @@ import Components from './Components';
 import { Containers, RealContainers } from './Containers';
 import HTMLElements from './HTMLElements';
 import generateElement from './generateElement';
+import conversion from './conversion';
 
 export {
   Components,
@@ -9,4 +10,5 @@ export {
   RealContainers,
   HTMLElements,
   generateElement,
+  conversion,
 };

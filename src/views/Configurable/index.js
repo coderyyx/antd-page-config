@@ -1,7 +1,7 @@
 import React from 'react';
 import shortid from 'shortid';
 import DndComp from '@/components/DndComp';
-import { generateElement } from '@/material';
+import { generateElement } from '@/core';
 import './index.less';
 
 export default class Configurable extends React.PureComponent {
