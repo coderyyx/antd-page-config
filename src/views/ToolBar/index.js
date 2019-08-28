@@ -3,7 +3,7 @@ import { Tooltip, Icon, Button, Drawer } from 'antd';
 import './index.less';
 
 const ToolBar = (props) => {
-  const { pageSize, onDelete } = props;
+  const { pageSize, onDelete, onSave } = props;
   const [codePreviewVisible, setCodePreviewVisible] = useState(false);
   return (
     <>
@@ -35,7 +35,7 @@ const ToolBar = (props) => {
         </div>
       </Tooltip>
       <div className='apc-save-page'>
-        <Button icon='save' type='primary'>保存</Button>
+        <Button icon='save' type='primary' onClick={onSave}>保存</Button>
       </div>
       <Drawer
         title='代码预览'

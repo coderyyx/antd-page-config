@@ -23,10 +23,10 @@ class ConfigurableElement {
     this.children = defaultElement.children || null;
     this.childrenIds = enhanceValue.childrenIds || [];
     this.style = { ...defaultElement.style, ...enhanceValue.style };
-    this.elementClassName = defaultElement.elementClassName;
+    this.elementClassName = defaultElement.elementClassName || '';
     this.attribute = defaultElement.attribute || {};
     this.layout = { ...material.layout, ...enhanceValue.layout };
-    this.containerClassName = defaultElement.containerClassName;
+    this.containerClassName = defaultElement.containerClassName || '';
     this.dndType = defaultElement.dndType || 'all'; // 拖拽放置的类型，默认为'all'
     this.extraValue = {}; // 额外的数据
   }

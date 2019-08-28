@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs } from 'antd';
+import { conversion } from '@/core';
 import Configurable from './Configurable';
 import Material from './Material';
 import AttributeSetting from './AttributeSetting';
@@ -9,12 +10,16 @@ import './index.less';
 const { TabPane } = Tabs;
 
 export default class AntdPageConfig extends React.Component {
-  state = {
-    activeKey: 'material',
-    currentDragMaterial: {},
-    currentElement: {},
-    willDeleteElementId: '',
-    pageSize: {},
+  constructor() {
+    super();
+    this.state = {
+      activeKey: 'material',
+      currentDragMaterial: {},
+      currentElement: {},
+      willDeleteElementId: '',
+      pageSize: {},
+    };
+    this.configurableRef = React.createRef();
   }
 
   setActivekey = (value) => {
@@ -59,6 +64,13 @@ export default class AntdPageConfig extends React.Component {
     }
   }
 
+  saveAllElements = () => {
+    const { elements } = this.configurableRef.current.state;
+    if (elements.length) {
+      conversion(elements);
+    }
+  }
+
   render() {
     const { activeKey, currentDragMaterial, currentElement, willDeleteElementId, pageSize } = this.state;
     return (
@@ -81,17 +93,18 @@ export default class AntdPageConfig extends React.Component {
             <ToolBar
               pageSize={pageSize}
               onDelete={this.deleteCurrentElement}
+              onSave={this.saveAllElements}
             />
           </header>
           <main className='apc-content'>
             <Configurable
+              ref={this.configurableRef}
               currentDragMaterial={currentDragMaterial}
               currentElement={currentElement}
               willDeleteElementId={willDeleteElementId}
               onSelect={this.selectCurrentElement}
               onChangePageSize={this.changePageSize}
             />
-
           </main>
         </section>
       </section>
