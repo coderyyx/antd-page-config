@@ -16,6 +16,17 @@ export default class DndComp extends React.PureComponent {
   componentDidMount() {
     const { value, pageRect } = this.props;
     const dndCompRect = document.querySelector(`#${value.id}`).getBoundingClientRect();
+    this.updateState(pageRect, dndCompRect);
+  }
+
+  componentDidUpdate(prevProps) {
+    const dndCompRect = document.querySelector(`#${prevProps.value.id}`).getBoundingClientRect();
+    if (dndCompRect.width !== this.state.elementSize.width || dndCompRect.height !== this.state.elementSize.height) {
+      this.updateState(prevProps.pageRect, dndCompRect);
+    }
+  }
+
+  updateState = (pageRect, dndCompRect) => {
     this.setState({
       limitBounds: {
         left: 0,
@@ -28,27 +39,6 @@ export default class DndComp extends React.PureComponent {
         height: dndCompRect.height,
       },
     });
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (document.querySelector(`#${nextProps.value.id}`)) {
-      const dndCompRect = document.querySelector(`#${nextProps.value.id}`).getBoundingClientRect();
-      if (dndCompRect.width !== prevState.elementSize.width || dndCompRect.height !== prevState.elementSize.height) {
-        return {
-          limitBounds: {
-            left: 0,
-            top: 0,
-            right: nextProps.pageRect.width - Math.round(dndCompRect.width),
-            bottom: nextProps.pageRect.height - Math.round(dndCompRect.height),
-          },
-          elementSize: {
-            width: dndCompRect.width,
-            height: dndCompRect.height,
-          },
-        };
-      }
-    }
-    return null;
   }
 
   onDragHandler = (handlerName, _, data) => {
