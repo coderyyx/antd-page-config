@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, InputNumber } from 'antd';
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -14,11 +14,7 @@ const ColumnsModal = (props) => {
   const onSumbit = () => {
     form.validateFields((err, value) => {
       if (err) return;
-      if (type === 'edit') {
-        onOk({ ...value, $_id: formValue.$_id });
-      } else {
-        onOk(value);
-      }
+      onOk(value);
       onDisplay();
     });
   };
@@ -56,7 +52,7 @@ const ColumnsModal = (props) => {
           {getFieldDecorator('width', {
             initialValue: formValue.width || undefined,
           })(
-            <Input placeholder='请输入' />,
+            <InputNumber placeholder='请输入' style={{ width: '100%' }} />,
           )}
         </FormItem>
       </Form>

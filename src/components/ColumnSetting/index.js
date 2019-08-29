@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import shortid from 'shortid';
 import { Table, Divider, Button, Empty } from 'antd';
 import RenderEmptyComp from '@/components/RenderEmptyComp';
 import ColumnsModal from './modal';
@@ -12,7 +11,7 @@ const ColumnSetting = React.forwardRef((props, ref) => {
   const [type, setType] = useState('');
   const [formValue, setFormValue] = useState({});
   useEffect(() => {
-    setDataSource([...value]);
+    setDataSource(value);
   }, [value]);
 
   const displayModal = (typeVal = '', index = -1, val = {}) => {
@@ -23,7 +22,7 @@ const ColumnSetting = React.forwardRef((props, ref) => {
   };
   const createAndEdit = (val) => {
     if (type === 'create') {
-      dataSource.splice(currentIndex + 1, 0, { ...val, $_id: shortid() });
+      dataSource.splice(currentIndex + 1, 0, val);
     } else {
       dataSource[currentIndex] = val;
     }

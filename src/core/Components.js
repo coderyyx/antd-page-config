@@ -30,7 +30,7 @@ export default {
     attribute: {
       pagination: false,
       rowKey: 'id',
-      columns: [{ dataIndex: 'id', title: '序号' }, { dataIndex: 'name', title: '姓名' }, { dataIndex: 'age', title: '年龄' }],
+      columns: [{ dataIndex: 'id', title: 'ID' }, { dataIndex: 'name', title: '姓名' }, { dataIndex: 'age', title: '年龄' }],
     },
   },
   Select: {
