@@ -6,8 +6,11 @@ import { parse, stringify } from './transformStyle';
  * @returns {Object}
  */
 
-export default (fieldsMap = {}) => {
+export default (fieldsMap = {}, extraValueKeys = []) => {
   if (typeof fieldsMap !== 'object' || fieldsMap === null) {
+    return {};
+  }
+  if (!Array.isArray(extraValueKeys)) {
     return {};
   }
   return {
@@ -30,6 +33,8 @@ export default (fieldsMap = {}) => {
           formValus.options = Form.createFormField({ value: value.options || defaultValue });
         } else if (field === 'layout') {
           formValus.layout = Form.createFormField({ value: value.layout || defaultValue });
+        } else if (extraValueKeys.some((key) => key === field)) {
+          formValus[field] = Form.createFormField({ value: attribute[field] || defaultValue });
         } else {
           formValus[field] = Form.createFormField({ value: attribute[field] || defaultValue });
         }
@@ -45,6 +50,7 @@ export default (fieldsMap = {}) => {
       // ensure props's value and props's onCollect
       if (typeof props.value === 'object' && props.value !== null && props.value.id && typeof props.onCollect === 'function') {
         const attribute = {};
+        const extraValue = {};
         Object.keys(allValue).forEach((field) => {
           if (field === 'children') {
             props.onCollect('children', allValue.children);
@@ -54,6 +60,8 @@ export default (fieldsMap = {}) => {
             props.onCollect('style', parse(allValue.style));
           } else if (field === 'options') {
             props.onCollect('options', allValue.options);
+          } else if (extraValueKeys.some((key) => key === field)) {
+            extraValue[field] = allValue[field];
           } else if (field === 'layout') {
             props.onCollect('layout', allValue.layout);
             props.onCollect('style', {
@@ -68,6 +76,7 @@ export default (fieldsMap = {}) => {
           }
         });
         props.onCollect('attribute', attribute);
+        props.onCollect('extraValue', extraValue);
       }
     },
   };

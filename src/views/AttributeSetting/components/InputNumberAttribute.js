@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form, Select, InputNumber } from 'antd';
 import { getFormOptions } from '@/util';
-import Placeholder from './Placeholder';
-import CssAndStyle from './CssAndStyle';
+import PlaceholderAttribute from './PlaceholderAttribute';
+import CssAndStyle from './CssAndStyleAttribute';
 
 
 const FormItem = Form.Item;
@@ -35,7 +35,7 @@ const InputNumberAttribute = ({ form }) => {
           </Select>,
         )}
       </FormItem>
-      <Placeholder
+      <PlaceholderAttribute
         formItemLayout={formItemLayout}
         getFieldDecorator={getFieldDecorator}
       />

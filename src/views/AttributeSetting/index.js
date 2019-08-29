@@ -26,6 +26,8 @@ export default function AttributeSetting(props) {
       currentElement.setAttribute(value);
     } else if (type === 'layout') {
       currentElement.setLayout(value);
+    } else if (type === 'extraValue') {
+      currentElement.setExtraValue(value);
     } else if (type === 'options') {
       currentElement.setOptions(value);
       const options = value.map((n) => (

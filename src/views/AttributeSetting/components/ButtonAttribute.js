@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Select } from 'antd';
 import { getFormOptions } from '@/util';
-import CssAndStyle from './CssAndStyle';
+import CssAndStyle from './CssAndStyleAttribute';
 
 const FormItem = Form.Item;
 const { Option } = Select;

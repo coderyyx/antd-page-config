@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Radio, Select } from 'antd';
 import ColumnSetting from '@/components/ColumnSetting';
 import { getFormOptions } from '@/util';
+import CssAndStyle from './CssAndStyleAttribute';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -49,9 +50,10 @@ const TableAttribute = ({ form }) => {
           <ColumnSetting />,
         )}
       </FormItem>
-      {
-
-      }
+      <CssAndStyle
+        formItemLayout={formItemLayout}
+        getFieldDecorator={getFieldDecorator}
+      />
     </Form>
   );
 };
@@ -62,7 +64,10 @@ const formFieldsMap = {
   columns: [],
   paginationVisible: false,
   rowSelectionVisible: false,
+  className: '',
+  style: '',
 };
 
+const extraValueKeys = ['paginationVisible', 'rowSelectionVisible'];
 
-export default Form.create(getFormOptions(formFieldsMap))(TableAttribute);
+export default Form.create(getFormOptions(formFieldsMap, extraValueKeys))(TableAttribute);
