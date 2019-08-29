@@ -30,6 +30,7 @@ export default class DndComp extends React.PureComponent {
   }
 
   updateState = (pageRect, dndCompRect) => {
+    const { value, onChange } = this.props;
     this.setState({
       limitBounds: {
         left: 0,
@@ -42,6 +43,13 @@ export default class DndComp extends React.PureComponent {
         height: dndCompRect.height,
       },
     });
+    if (dndCompRect.height + value.layout.y > pageRect.height) {
+      value.setLayout({
+        x: value.layout.x,
+        y: pageRect.height - dndCompRect.height,
+      });
+      onChange(value.id, value);
+    }
   }
 
   onDragHandler = (handlerName, _, data) => {

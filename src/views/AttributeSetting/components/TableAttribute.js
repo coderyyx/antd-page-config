@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Radio, Select } from 'antd';
+import { Form, Input, Select } from 'antd';
 import ColumnSetting from '@/components/ColumnSetting';
 import { getFormOptions } from '@/util';
 import CssAndStyle from './CssAndStyleAttribute';
@@ -29,7 +29,7 @@ const TableAttribute = ({ form }) => {
           </Select>,
         )}
       </FormItem>
-      <FormItem label='分页功能' {...formItemLayout}>
+      {/* <FormItem label='分页功能' {...formItemLayout}>
         {getFieldDecorator('paginationVisible')(
           <Radio.Group>
             <Radio value>开启</Radio>
@@ -44,7 +44,7 @@ const TableAttribute = ({ form }) => {
             <Radio value={false}>关闭</Radio>
           </Radio.Group>,
         )}
-      </FormItem>
+      </FormItem> */}
       <FormItem label='列的设置'>
         {getFieldDecorator('columns')(
           <ColumnSetting />,
