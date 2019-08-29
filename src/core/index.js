@@ -3,6 +3,7 @@ import { Containers, RealContainers } from './Containers';
 import HTMLElements from './HTMLElements';
 import generateElement from './generateElement';
 import conversion from './conversion';
+import AntdPageConfigContext from './context';
 
 export {
   Components,
@@ -11,4 +12,5 @@ export {
   HTMLElements,
   generateElement,
   conversion,
+  AntdPageConfigContext,
 };

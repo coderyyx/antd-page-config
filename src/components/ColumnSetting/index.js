@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Divider, Button, Empty } from 'antd';
+import { AntdPageConfigContext } from '@/core';
 import RenderEmptyComp from '@/components/RenderEmptyComp';
 import ColumnsModal from './modal';
 
@@ -69,22 +70,31 @@ const ColumnSetting = React.forwardRef((props, ref) => {
 
   return (
     <div ref={ref}>
-      <RenderEmptyComp customizeRenderEmpty={EmptyComp}>
-        <Table
-          rowKey='dataIndex'
-          columns={columns}
-          dataSource={dataSource || []}
-          pagination={false}
-          size='small'
-        />
-      </RenderEmptyComp>
-      <ColumnsModal
-        formValue={formValue}
-        visible={visible}
-        type={type}
-        onOk={createAndEdit}
-        onDisplay={displayModal}
-      />
+      <AntdPageConfigContext.Consumer>
+        {
+          (contextValue) => (
+            <>
+              <RenderEmptyComp customizeRenderEmpty={EmptyComp}>
+                <Table
+                  rowKey='dataIndex'
+                  columns={columns}
+                  dataSource={dataSource || []}
+                  pagination={false}
+                  size='small'
+                />
+              </RenderEmptyComp>
+              <ColumnsModal
+                formValue={formValue}
+                visible={visible}
+                type={type}
+                onOk={createAndEdit}
+                onDisplay={displayModal}
+                {...contextValue}
+              />
+            </>
+          )
+        }
+      </AntdPageConfigContext.Consumer>
     </div>
   );
 });
