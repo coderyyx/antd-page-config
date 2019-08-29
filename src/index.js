@@ -1,7 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './app';
-import './index.less';
+import AntdPageConfig from './views/index';
+import { generateElement } from './core/index';
 
-ReactDOM.render(<App />,
-  document.getElementById('app'));
+export default AntdPageConfig;
+
+export {
+  generateElement,
+};

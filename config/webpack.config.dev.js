@@ -5,7 +5,7 @@ const eslintFormatter = require('eslint-friendly-formatter');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: './src/app.js',
   output: {
     filename: 'js/[name].js',
     chunkFilename: 'js/[name].chunk.js',

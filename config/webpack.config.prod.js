@@ -11,7 +11,7 @@ const InlineSourcePlugin = require('html-webpack-inline-source-plugin');
 module.exports = {
   mode: 'production',
   entry: {
-    main: './src/index.js',
+    main: './src/app.js',
   },
   output: {
     filename: 'js/[name].[chunkhash:8].js',

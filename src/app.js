@@ -1,10 +1,16 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
-import App from './views';
+import AntdPageConfig from './views';
+import './index.less';
 
-export default () => (
+const App = () => (
   <ConfigProvider locale={zhCN}>
-    <App />
+    <AntdPageConfig />
   </ConfigProvider>
 );
+
+
+ReactDOM.render(<App />,
+  document.getElementById('app'));
