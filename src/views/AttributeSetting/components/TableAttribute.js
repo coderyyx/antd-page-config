@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Select } from 'antd';
 import ColumnSetting from '@/components/ColumnSetting';
+import { AntdPageConfigContext } from '@/core';
 import { getFormOptions } from '@/util';
 import CssAndStyle from './CssAndStyleAttribute';
 
@@ -45,11 +46,17 @@ const TableAttribute = ({ form }) => {
           </Radio.Group>,
         )}
       </FormItem> */}
-      <FormItem label='列的设置'>
-        {getFieldDecorator('columns')(
-          <ColumnSetting />,
-        )}
-      </FormItem>
+      <AntdPageConfigContext.Consumer>
+        {
+          (contextValue) => (
+            <FormItem label='列的设置'>
+              {getFieldDecorator('columns')(
+                <ColumnSetting {...contextValue} />,
+              )}
+            </FormItem>
+          )
+        }
+      </AntdPageConfigContext.Consumer>
       <CssAndStyle
         formItemLayout={formItemLayout}
         getFieldDecorator={getFieldDecorator}

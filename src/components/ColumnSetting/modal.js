@@ -9,7 +9,7 @@ const formItemLayout = {
 };
 
 const ColumnsModal = (props) => {
-  const { visible, type, onDisplay, onOk, formValue, form, antdTableColumnMode, antdTableColumnOptions } = props;
+  const { visible, type, onDisplay, onOk, formValue, form, antdTableColumnMode = 'input', antdTableColumnOptions } = props;
   const { getFieldDecorator, setFieldsValue } = form;
 
   const onSumbit = () => {

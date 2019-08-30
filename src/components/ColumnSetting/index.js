@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Divider, Button, Empty } from 'antd';
-import { AntdPageConfigContext } from '@/core';
 import RenderEmptyComp from '@/components/RenderEmptyComp';
 import ColumnsModal from './modal';
 
 const ColumnSetting = React.forwardRef((props, ref) => {
-  const { value = [], onChange } = props;
+  const { value = [], onChange, antdTableColumnMode, antdTableColumnOptions } = props;
   const [dataSource, setDataSource] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [visible, setVisible] = useState(false);
@@ -70,31 +69,24 @@ const ColumnSetting = React.forwardRef((props, ref) => {
 
   return (
     <div ref={ref}>
-      <AntdPageConfigContext.Consumer>
-        {
-          (contextValue) => (
-            <>
-              <RenderEmptyComp customizeRenderEmpty={EmptyComp}>
-                <Table
-                  rowKey='dataIndex'
-                  columns={columns}
-                  dataSource={dataSource || []}
-                  pagination={false}
-                  size='small'
-                />
-              </RenderEmptyComp>
-              <ColumnsModal
-                formValue={formValue}
-                visible={visible}
-                type={type}
-                onOk={createAndEdit}
-                onDisplay={displayModal}
-                {...contextValue}
-              />
-            </>
-          )
-        }
-      </AntdPageConfigContext.Consumer>
+      <RenderEmptyComp customizeRenderEmpty={EmptyComp}>
+        <Table
+          rowKey='dataIndex'
+          columns={columns}
+          dataSource={dataSource || []}
+          pagination={false}
+          size='small'
+        />
+      </RenderEmptyComp>
+      <ColumnsModal
+        antdTableColumnMode={antdTableColumnMode}
+        antdTableColumnOptions={antdTableColumnOptions}
+        type={type}
+        visible={visible}
+        formValue={formValue}
+        onOk={createAndEdit}
+        onDisplay={displayModal}
+      />
     </div>
   );
 });
