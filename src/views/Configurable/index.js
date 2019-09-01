@@ -19,6 +19,7 @@ export default class Configurable extends React.PureComponent {
         width: 0,
         height: 0,
       },
+      formContainerRange: {},
     };
     this.layoutRef = React.createRef();
     this.now = Date.now();
@@ -32,9 +33,11 @@ export default class Configurable extends React.PureComponent {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { elements, pageRect } = prevState;
+    const { elements, pageRect, formContainerRange } = prevState;
     const { currentDragMaterial, currentElement, willDeleteElementId } = nextProps;
     const materialRect = currentDragMaterial.layout || {};
+    sessionStorage.setItem('xxoo', currentDragMaterial.id);
+    // 拖拽生成元素
     if (!elements.some((_) => _.id === currentDragMaterial.id) && currentDragMaterial.id) {
       if (materialRect.x >= pageRect.left && materialRect.x + materialRect.w <= pageRect.right
         && materialRect.y >= pageRect.top && materialRect.y + materialRect.h <= pageRect.bottom) {
@@ -52,6 +55,13 @@ export default class Configurable extends React.PureComponent {
         const extraValue = {};
         if (preElement.type === 'containerComp') {
           preElement.layout.x = 0;
+          if (preElement.tagName === 'FormItem') {
+            if (formContainerRange.id) {
+              if (formContainerRange.left <= preElement.layout.x && formContainerRange.top >= preElement.layout.y) {
+                return null;
+              }
+            }
+          }
           const containerWidth = pageRect.width;
           const containerHeight = Math.round(pageRect.height / Configurable.ContainerHeightDivsion[preElement.tagName]);
           extraValue.layout = {
@@ -70,6 +80,7 @@ export default class Configurable extends React.PureComponent {
               tagName: 'Form',
               type: 'realContainerComp',
             });
+
             extraValue.childrenIds = [newRealElement.id];
           }
         }
@@ -79,14 +90,28 @@ export default class Configurable extends React.PureComponent {
         const newElement = generateElement(preElement, extraValue);
         if (newElement) {
           const currentElements = [...elements, newElement];
+          let newFormContainerRange; // FormContainerRnge
           if (currentElements.length !== elements.length) {
+            if (newElement.tagName === 'Form') {
+              newFormContainerRange = {
+                id: newElement.id,
+                type: newElement.type,
+                tagName: newElement.tagName,
+                left: newElement.layout.x,
+                right: newElement.layout.x + newElement.layout.w,
+                top: newElement.layout.y,
+                bottom: newElement.layout.y + newElement.layout.h,
+              };
+            }
             return {
               elements: currentElements,
+              formContainerRange: newFormContainerRange,
             };
           }
         }
       }
     }
+    // 更新元素
     if (currentElement.id) {
       const index = elements.find((_) => _.id === currentElement.id);
       elements[index] = currentElement;
@@ -94,6 +119,7 @@ export default class Configurable extends React.PureComponent {
         elements: [...elements],
       };
     }
+    // 删除元素
     if (willDeleteElementId) {
       const index = elements.find((_) => _.id === willDeleteElementId);
       if (index) {

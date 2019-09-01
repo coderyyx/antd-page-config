@@ -32,7 +32,7 @@
 
 .apc-row-container-dnd {
   box-shadow: 0 0 1px 1px #2062f0;
-  z-index: 10 !important;
+  z-index: 20 !important;
 
   .ant-row {
     height: 100%;
@@ -51,5 +51,22 @@
     color: #2062f0;
     border-left: 1px dotted #2062f0;
     border-bottom: 1px dotted #2062f0;
+  }
+}
+
+.apc-formItem-container-dnd {
+  box-shadow: 0 0 1px 1px #0124ff;
+  z-index: 30 !important;
+  height: 100px;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    content: '表单项容器';
+    font-size: 12px;
+    color: #0124ff;
+    border-left: 1px dotted #0124ff;
+    border-bottom: 1px dotted #0124ff;
   }
 }
