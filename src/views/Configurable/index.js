@@ -1,4 +1,5 @@
 import React from 'react';
+import { Notification } from 'antd';
 import shortid from 'shortid';
 import DndComp from '@/components/DndComp';
 import { generateElement } from '@/core';
@@ -8,6 +9,7 @@ export default class Configurable extends React.PureComponent {
   static ContainerHeightDivsion = {
     Form: 3,
     Grid: 10,
+    FormItem: 15,
   }
 
   constructor() {
@@ -36,7 +38,6 @@ export default class Configurable extends React.PureComponent {
     const { elements, pageRect, formContainerRange } = prevState;
     const { currentDragMaterial, currentElement, willDeleteElementId } = nextProps;
     const materialRect = currentDragMaterial.layout || {};
-    sessionStorage.setItem('xxoo', currentDragMaterial.id);
     // 拖拽生成元素
     if (!elements.some((_) => _.id === currentDragMaterial.id) && currentDragMaterial.id) {
       if (materialRect.x >= pageRect.left && materialRect.x + materialRect.w <= pageRect.right
@@ -55,11 +56,20 @@ export default class Configurable extends React.PureComponent {
         const extraValue = {};
         if (preElement.type === 'containerComp') {
           preElement.layout.x = 0;
+          if (formContainerRange.id && preElement.tagName === 'Form') {
+            Notification.info({
+              message: '注意事项',
+              description: '页面配置中只允许放置一个表单容器',
+            });
+            return null;
+          }
           if (preElement.tagName === 'FormItem') {
             if (formContainerRange.id) {
               if (formContainerRange.left <= preElement.layout.x && formContainerRange.top >= preElement.layout.y) {
                 return null;
               }
+            } else {
+              return null;
             }
           }
           const containerWidth = pageRect.width;
@@ -80,6 +90,7 @@ export default class Configurable extends React.PureComponent {
               tagName: 'Form',
               type: 'realContainerComp',
             });
+            newRealElement.hidden = true;
 
             extraValue.childrenIds = [newRealElement.id];
           }
@@ -90,7 +101,10 @@ export default class Configurable extends React.PureComponent {
         const newElement = generateElement(preElement, extraValue);
         if (newElement) {
           const currentElements = [...elements, newElement];
-          let newFormContainerRange; // FormContainerRnge
+          if (newRealElement) {
+            currentElements.push(newRealElement);
+          }
+          let newFormContainerRange = formContainerRange; // FormContainerRnge
           if (currentElements.length !== elements.length) {
             if (newElement.tagName === 'Form') {
               newFormContainerRange = {
@@ -189,7 +203,7 @@ export default class Configurable extends React.PureComponent {
       <div className='apc-configure-layout' ref={this.layoutRef}>
         <div className='apc-configure-page' style={{ width: pageRect.width, height: pageRect.height }}>
           {
-            elements.map((n) => (
+            elements.filter((n) => !n.hidden).map((n) => (
               <DndComp
                 key={n.id}
                 value={n}

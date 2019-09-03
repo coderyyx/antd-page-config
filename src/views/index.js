@@ -28,11 +28,17 @@ export default class AntdPageConfig extends React.Component {
     });
   }
 
-  setCurrentDragMaterial = (value) => [
+  setCurrentDragMaterial = (value) => {
     this.setState({
       currentDragMaterial: value,
-    }),
-  ]
+    });
+    // 拖拽操作结束后重置为空对象
+    setTimeout(() => {
+      this.setState({
+        currentDragMaterial: {},
+      });
+    }, 0);
+  }
 
   selectCurrentElement = (value) => {
     this.setState({
