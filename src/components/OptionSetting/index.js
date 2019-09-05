@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Divider, Radio, Empty, Button } from 'antd';
 import shortid from 'shortid';
-import RenderEmptyComp from '@/components/RenderEmptyComp';
+import RenderEmptyComp from '../RenderEmptyComp';
 import OptionsModal from './modal';
 
 const OptionSetting = React.forwardRef((props, ref) => {

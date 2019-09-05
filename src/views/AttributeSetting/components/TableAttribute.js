@@ -1,9 +1,9 @@
 import React from 'react';
 import { Form, Input, Select } from 'antd';
-import ColumnSetting from '@/components/ColumnSetting';
-import { AntdPageConfigContext } from '@/core';
-import { getFormOptions } from '@/util';
 import CssAndStyle from './CssAndStyleAttribute';
+import ColumnSetting from '../../../components/ColumnSetting';
+import { AntdPageConfigContext } from '../../../core';
+import { getFormOptions } from '../../../util';
 
 const FormItem = Form.Item;
 const { Option } = Select;

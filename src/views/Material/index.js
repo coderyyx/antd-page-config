@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Collapse } from 'antd';
 import shortid from 'shortid';
-import { Components, Containers } from '@/core';
-import DndMaterial from '@/components/DndMaterial';
+import DndMaterial from '../../components/DndMaterial';
+import { Components, Containers } from '../../core';
 import './index.less';
 
 const { Panel } = Collapse;

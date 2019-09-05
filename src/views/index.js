@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'antd';
-import { conversion, AntdPageConfigContext } from '@/core';
+import { conversion, AntdPageConfigContext } from '../core';
 import Configurable from './Configurable';
 import Material from './Material';
 import AttributeSetting from './AttributeSetting';

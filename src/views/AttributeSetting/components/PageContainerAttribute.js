@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'antd';
-import LayoutSetting from '@/components/LayoutSetting';
-import { getFormOptions } from '@/util';
+import LayoutSetting from '../../../components/LayoutSetting';
+import { getFormOptions } from '../../../util';
 
 const FormItem = Form.Item;
 

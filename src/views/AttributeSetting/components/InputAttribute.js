@@ -1,9 +1,8 @@
 import React from 'react';
 import { Form, Input, Select, Radio } from 'antd';
-import { getFormOptions } from '@/util';
 import Placeholder from './PlaceholderAttribute';
 import CssAndStyle from './CssAndStyleAttribute';
-
+import { getFormOptions } from '../../../util';
 
 const FormItem = Form.Item;
 const { Option } = Select;

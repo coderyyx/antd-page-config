@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form, InputNumber } from 'antd';
-import LayoutSetting from '@/components/LayoutSetting';
-import ColSetting from '@/components/ColSetting';
-import { getFormOptions } from '@/util';
+import LayoutSetting from '../../../components/LayoutSetting';
+import ColSetting from '../../../components/ColSetting';
+import { getFormOptions } from '../../../util';
 
 const FormItem = Form.Item;
 

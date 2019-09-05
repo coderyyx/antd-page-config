@@ -1,17 +1,28 @@
 {
   "name": "antd-page-config",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "A component that can be configured to display pages",
+  "main": "lib/index.js",
+    "repository": {
+    "type": "git",
+    "url": "http://github.com/yupeilin123/antd-page-config.git"
+  },
+  "homepage": "https://github.com/yupeilin123/antd-page-config",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --config scripts/start.js",
-    "build": "cross-env NODE_ENV=production node scripts/build.js",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config scripts/start.js",
+    "build": "babel src --out-dir lib --copy-files",
+    "build:dev": "cross-env NODE_ENV=production node scripts/build.js",
     "analyze": "cross-env ANALYZE=true node scripts/build.js",
     "lint": "eslint --ext .js src",
     "lint:fix": "eslint --fix --ext .js src"
   },
-  "keywords": [],
-  "author": "yupeilin",
+  "keywords": [
+    "draggable",
+    "configurable",
+    "antd",
+    "react"
+  ],
+  "author": "yupeilin <yuchacha250@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "antd": "^3.21.2",

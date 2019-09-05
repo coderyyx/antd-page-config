@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Divider, Button, Empty } from 'antd';
-import RenderEmptyComp from '@/components/RenderEmptyComp';
+import RenderEmptyComp from '../RenderEmptyComp';
 import ColumnsModal from './modal';
 
 const ColumnSetting = React.forwardRef((props, ref) => {

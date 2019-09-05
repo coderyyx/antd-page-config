@@ -1,8 +1,8 @@
 import React from 'react';
 import { Notification } from 'antd';
 import shortid from 'shortid';
-import DndComp from '@/components/DndComp';
-import { generateElement } from '@/core';
+import DndComp from '../../components/DndComp';
+import { generateElement } from '../../core';
 import './index.less';
 
 export default class Configurable extends React.PureComponent {

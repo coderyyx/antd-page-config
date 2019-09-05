@@ -5,7 +5,7 @@ module.exports = function (api) {
     [
       '@babel/env',
       {
-        modules: false,
+        modules: 'commonjs',
         targets: {
           browsers: [
             '> 1%',
