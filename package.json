@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A component that can be configured to display pages",
   "main": "lib/index.js",
-    "repository": {
+  "repository": {
     "type": "git",
     "url": "http://github.com/yupeilin123/antd-page-config.git"
   },
